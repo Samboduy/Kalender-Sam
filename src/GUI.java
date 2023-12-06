@@ -1,13 +1,13 @@
 //alla paket som behövs
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.*;
-import java.util.*;
-
-import static javax.swing.UIManager.get;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class GUI extends JFrame implements ActionListener {
     //AJ variabler sorterade efter java regler
