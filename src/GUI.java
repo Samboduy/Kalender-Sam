@@ -1,64 +1,29 @@
 //alla paket som behövs
+
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.*;
-import java.util.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class GUI extends JFrame implements ActionListener {
-
-    /*Privata egenskaper samt datum,listor med paneler, labels, knappar, textfields, textareas*/
-    private LocalDate useDate;
-    private LocalDate today = LocalDate.now();
+    //AJ variabler sorterade efter java regler
     ArrayList<LocalDate> sevenDates = new ArrayList<>();
-     private boolean on=false;
-    private LocalDate fakeMonday =
-            LocalDate.of(2023,11,6);
-    public LocalDate getUseDate() {
-
-        return this.useDate;
-    }
-    public boolean getOn(){
-
-        return this.on;
-    }
-    public void setOn(boolean newOn){
-
-        this.on=newOn;
-    }
-    public void setUseDate(LocalDate newUseDate){
-
-        this.useDate = newUseDate;
-    }
-    public LocalDate getFakeMonday(){
-
-        return this.fakeMonday;
-    }
-    public void setFakeMonday(LocalDate newFakeMonday){
-
-        this.fakeMonday=newFakeMonday;
-    }
-    public void setToday(LocalDate newToday) {
-        this.today = newToday;
-    }
-    public LocalDate getToday() {
-        return today;
-    }
-
     HashMap<LocalDate,String> memory = new HashMap<>();
-
+        //AJ tydligare namn på variabel om vad som sparas, fältinfo verkar sparas här mot rätt dag
     ArrayList<JPanel> headerList = new ArrayList<>();
-
     ArrayList<JTextArea> textContent = new ArrayList<>();
     ArrayList<JPanel> panelList = new ArrayList<>();
-
-
-
-
     ArrayList<JButton> buttonWeekList = new ArrayList<>();
     ArrayList<JButton> buttonList = new ArrayList<>();
-
+    JPanel footer;//tillagt AJ
+    Font fontDayMonth = (new Font("Serif", Font.PLAIN, 11));//tillagt AJ
+    GridLayout gridLayout = new GridLayout(2, 1);//tillagt AJ
+    Border panelBorder = BorderFactory.createLineBorder(Color.GRAY);//tillagt AJ
+    Color white = (Color.white); //tillagt AJ
     JTextField [] fieldList = {new JTextField(""),
             new JTextField(""),
             new JTextField(""),
@@ -66,20 +31,63 @@ public class GUI extends JFrame implements ActionListener {
             new JTextField(""),
             new JTextField(""),
             new JTextField("")};
-
-
     JFrame calender = new JFrame();
+    /*Privata egenskaper samt datum, listor med paneler, labels, knappar, text-fields, textareas*/
+    private LocalDate useDate;
+    private LocalDate today = LocalDate.now();
+    private boolean on=false;
+    private LocalDate fakeMonday =
+            LocalDate.of(2023,11,6);
 
-    /*Start metoden ger jFrame calendern en titel, vilken storlek, att den ska stänga sig, ställer in layouten
-    och kallar på generator konstruktorn*/
+    public LocalDate getUseDate() {
+
+        return this.useDate;
+    }
+
+    public void setUseDate(LocalDate newUseDate){
+
+        this.useDate = newUseDate;
+    }
+
+    public boolean getOn(){
+
+        return this.on;
+    }
+
+    public void setOn(boolean newOn){
+
+        this.on=newOn;
+    }
+
+    public LocalDate getFakeMonday(){
+
+        return this.fakeMonday;
+    }
+
+    public LocalDate getToday() {
+        return today;
+    }
+
+    // AJ Används inte, kan plockas bort
+    /*public void setFakeMonday(LocalDate newFakeMonday){
+
+        this.fakeMonday=newFakeMonday;
+    }*/
+    public void setToday(LocalDate newToday) {
+        this.today = newToday;
+    }
+
+    /*Start metoden ger jFrame calendar en titel, vilken storlek, att den ska stänga sig, ställer in layouten
+    och kallar på generator constructor*/
+        //AJ istället för att skriva det så här i en klumptext hade jag satt kortare kommentarer inne i koden
     public void start() {
 
-        calender.setTitle("Calender");
-        calender.setSize(800, 600);
+        calender.setTitle("Calender"); //titel på kalender
+        calender.setSize(800, 600); //sätter storlek
         calender.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         calender.setLayout(new GridLayout(1, 9, 10, 0));
 
-        generator(LocalDate.now());
+        generator(LocalDate.now()); //hämtar in dagens datum
         calender.setVisible(true);
     }
 
@@ -97,38 +105,38 @@ public class GUI extends JFrame implements ActionListener {
         /*lägger till en knapp för att ändra till föra veckan*/
         calender.add(buttonWeekList.get(0));
 
+
         /*kör så länge useDate är lika med måndag och i inte är lika med 7*/
         for (int i=0; getUseDate().getDayOfWeek()
                 .equals(getFakeMonday().getDayOfWeek()) && i!=7; i++){
-            /*skapar ny tom Jlabels*/
+            /*skapar ny tom JLabels*/
             JLabel weekName = new JLabel();
             JLabel dayMonth = new JLabel();
 
-            /*sparar vilken veckodag det är i label weekName genom sevendates listan
-            * sammma sak med dayMonth förutom att den sparar dag och månad*/
+            /*sparar vilken veckodag det är i label weekName genom seven-dates listan
+            * samma sak med dayMonth förutom att den sparar dag och månad*/
             weekName.setText(String.valueOf(sevenDates.get(i).getDayOfWeek()));
             dayMonth.setText((sevenDates.get(i).getDayOfMonth()) + " "
                     + (sevenDates.get(i).getMonth()) );
-            /*ändrar fontet på dayMonth labeln*/
-            dayMonth.setFont(new Font("Serif", Font.PLAIN, 11));
+            /*ändrar font på dayMonth label*/
+            dayMonth.setFont(fontDayMonth);
 
-            /*tar fram en panel och ställer in layouten,ger panelen en grå border samt ändrar bakgrundsfärg */
+            /*tar fram en panel och ställer in layouten, ger panelen en grå border samt ändrar bakgrundsfärg */
             panelList.get(i).setLayout(new BorderLayout());
-            panelList.get(i).setBorder(BorderFactory.createLineBorder(Color.GRAY));
-            panelList.get(i).setBackground(Color.white);
+            panelList.get(i).setBorder(panelBorder);
+            panelList.get(i).setBackground(white);
 
             /*tar fram en panel från headerList och ändrar des layout,
-            bakgrundsfärg och läger till weekName label och daymonth labeln*/
-            headerList.get(i).setLayout(new GridLayout(2, 1));
-            headerList.get(i).setBackground(Color.white);
+            bakgrundsfärg och läger till weekName label och dayMonth label*/
+            headerList.get(i).setLayout(gridLayout);
+            headerList.get(i).setBackground(white);
             headerList.get(i).add(weekName);
             headerList.get(i).add(dayMonth);
 
-            /*skappar en ny Jpanel och ändrar des layout,
+            /*Skapar en ny JPanel och ändrar des layout,
             backgrundsfärg och lägger till en textField och en knapp deras listor*/
-            JPanel footer = new JPanel();
-            footer.setLayout(new GridLayout(2,1));
-            footer.setBackground(Color.white);
+            footer = new JPanel();
+            footerDesign();
             footer.add(fieldList[i]);
             footer.add(buttonList.get(i));
 
@@ -137,7 +145,7 @@ public class GUI extends JFrame implements ActionListener {
 
             /*Panelen lägger till en textArea från dess lista,
              lägger till en header och en footer från deras listor samt bestämmer layouten.
-              PanelListan läggs sen till i calendern, calender uppdaterar sig genom setVisivle true */
+              PanelListan läggs sen till i calendar, calender uppdaterar sig genom setVisible true */
             panelList.get(i).add(textContent.get(i));
             writeMemory(sevenDates.get(i),i);
             panelList.get(i).add(headerList.get(i), BorderLayout.NORTH);
@@ -148,8 +156,8 @@ public class GUI extends JFrame implements ActionListener {
             calender.setVisible(true);
         }
 
-        /*lägger till en knapp till calendern som ändrar till nästa vecka, on blir true och ändras aldrig till false igen.
-        * on används för att kolla om programet redan har körts en gång*/
+        /*Lägger till en knapp till calendar som ändrar till nästa vecka, on blir true och ändras aldrig till false igen.
+        * On används för att kolla om programmet redan har körts en gång*/
         calender.add(buttonWeekList.get(1));
         setOn(true);
         calender.setVisible(true);
@@ -164,14 +172,14 @@ public class GUI extends JFrame implements ActionListener {
 
             setUseDate(getUseDate().minusDays(1));
         }
-        //for loopen skriver in sju datum i sevenDates listan genom att använda usedate så länge j inte är lika med 7
+        //for loopen skriver in sju datum i sevenDates listan genom att använda useDate så länge j inte är lika med 7
         for (int j = 0; j!=7; j++){
 
             sevenDates.add(getUseDate());
             setUseDate(getUseDate().plusDays(1));
         }
     }
-    /*rensar listor så att de kan användas igen och tar bort varje panel från calendern*/
+    /*rensar listor så att de kan användas igen och tar bort varje panel från calendar*/
     public void clearLists(){
         if (getOn()){
             for (int i = 0; i!=7; i++){
@@ -180,13 +188,15 @@ public class GUI extends JFrame implements ActionListener {
                 headerList.clear();
                 sevenDates.clear();
 
+
             }
         }
         panelList.clear();
     }
 
     /*Metod som skapar nya tomma textAreas, paneler samt knappar med namn.
-     ger knappar actionlisteners om boolean on inte är true*/
+     ger knappar actionListeners om boolean on inte är true*/
+
     public void create(){
 
         for (int i = 0; i != 7; i++) {
@@ -204,20 +214,22 @@ public class GUI extends JFrame implements ActionListener {
             addListeners();
         }
     }
-    /*marker metoden markerar textArean och headerLabeln med rosa färg om det är dagens datum, resten får vit färg*/
+
+    /*marker metoden markerar textArean och header label med rosa färg om det är dagens datum, resten får vit färg*/
     public void marker(int i){
         if(getToday().equals(sevenDates.get(i))){
             textContent.get(i).setBackground(Color.pink);
             headerList.get(i).setBackground(Color.pink);
         }
-        else{
+        /*else {
             textContent.get(i).setBackground(Color.white);
 
             headerList.get(i).setBackground(Color.white);
-
-        }
+                           AJ Onödigt att sätta detta vitt eftersom det redan är det sen tidigare i koden
+        }*/
     }
-    /*update metoden kollar om datumet som sparat i today är dagens datum,
+
+    /*Update metoden kollar om datumet som sparat i today är dagens datum,
     är det inte det så ändras today till dagens datum och sen kallar den på generator metoden*/
     public void update(){
         if (!getToday().equals(LocalDate.now())){
@@ -225,21 +237,26 @@ public class GUI extends JFrame implements ActionListener {
             generator(getToday());
         }
     }
-    /*addMemory konstruktorn tar emot ett datum och en String. Datumet och String kommer från knappen man har tryckt på.
-    * memory är hashmap som gör datumet till en nyckel och sparar Stringen*/
-    public void addMemory(LocalDate key, String text) {
+
+    /*addMemory constructor tar emot ett datum och en String. Datumet och String kommer från knappen man har tryckt på.
+    * Memory är hashmap som gör datumet till en nyckel och sparar Stringen*/
+
+    //addMemory används inte, kan plockas bort
+    /*public void addMemory(LocalDate key, String text) {
         memory.put(key,text);
-    }
-    /*writeMemory konstruktorn tar emot ett datum från genrator och en Integer från konstruktorn och
-    kollar om memory hashmapen har en nyckel som stämmer överäns.
-    Om det stämmer så tar textcontent fram rätt textArea med hjälp av Integern
-    och sen srkivs allting som fanns i den nyckeln in i rätt textArea*/
+    }*/
+
+    /*writeMemory constructor tar emot ett datum från generator och en Integer från constructor och
+    kollar om memory hashmap har en nyckel som stämmer överens.
+    Om det stämmer så tar textContent fram rätt textArea med hjälp av Integer
+    och sen skrivs allting som fanns i den nyckeln in i rätt textArea*/
     public void writeMemory(LocalDate key, int textArea){
 
         if (getOn()&& memory.containsKey(key)){
             textContent.get(textArea).append(memory.get(key));
         }
     }
+
     /*addListeners lägger till ActionListeners till alla knappar*/
     public void addListeners() {
         for (int h = 0; h!=7; h++){
@@ -249,18 +266,25 @@ public class GUI extends JFrame implements ActionListener {
            buttonWeekList.get(1).addActionListener(this);
     }
 
-
     /*Om man trycker på en create knapp så sparas texten man skrev in i en textField i en String,
      sen tar den fram rätt textArea och skriver ut texten i en ny rad.
-     Det man skrev skickas till addMemor metoden samt vilket datum. calendern uppdateras med setVisible.
+     Det man skrev skickas till addMemory metoden samt vilket datum. Calendar uppdateras med setVisible.
      Update metoden ser till så att det blir rätt dag*/
     @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == buttonList.get(0)) {
+    public void actionPerformed(ActionEvent e) { //sätta switch case eller for loop här istället för if sats
+
+        for (int i= 0; i<buttonList.size(); i++){
+            if (e.getSource() == buttonList.get(i)){
+                update();
+                String content = " " + fieldList[i].getText();
+                textContent.get(i).append(content +"\n");
+                fieldList[i].setText("");
+                calender.setVisible(true);
+            }
+        }
+        /*if (e.getSource() == buttonList.get(0)) {
             update();
             String content = " " + fieldList[0].getText();
-            textContent.get(0).append(content +"\n");
-
             addMemory(sevenDates.get(0),textContent.get(0).getText());
             calender.setVisible(true);
         }
@@ -312,25 +336,26 @@ public class GUI extends JFrame implements ActionListener {
             addMemory(sevenDates.get(6),textContent.get(6).getText());
 
             calender.setVisible(true);
-        }
-        /*buttonWeekList ändrar på useDate till måndags datum minus en vecka,
-         rensar textContent listan vilken innehåller textArean och kallar på generator konstruktorn */
-        else if (e.getSource() == buttonWeekList.get(0)) {
+        }*/
 
+        /*buttonWeekList ändrar på useDate till måndags datum minus en vecka,
+         rensar textContent listan vilken innehåller textArean och kallar på generator constructor */
+        if (e.getSource() == buttonWeekList.get(0)) {
             setUseDate(sevenDates.get(0));
             setUseDate(getUseDate().minusWeeks(1));
             textContent.clear();
             generator(getUseDate());
-
-
         }
         else if (e.getSource() == buttonWeekList.get(1)) {
             setUseDate(sevenDates.get(0));
             setUseDate(getUseDate().plusWeeks(1));
             textContent.clear();
             generator(getUseDate());
-
         }
 
+    }
+    public void footerDesign(){
+        footer.setLayout(gridLayout);
+        footer.setBackground(Color.white);
     }
 }
