@@ -188,6 +188,7 @@ public class GUI extends JFrame implements ActionListener {
                 headerList.clear();
                 sevenDates.clear();
 
+
             }
         }
         panelList.clear();
@@ -277,6 +278,7 @@ public class GUI extends JFrame implements ActionListener {
                 update();
                 String content = " " + fieldList[i].getText();
                 textContent.get(i).append(content +"\n");
+                fieldList[i].setText("");
                 calender.setVisible(true);
             }
         }
